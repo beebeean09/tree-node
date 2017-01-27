@@ -27,27 +27,37 @@ class PolyTreeNode
     else
       @parent = target_node
       target_node.children << self unless target_node.children.include?(self)
-      # byebug
-      target_node.parent.children.reject! { |child| child== self } unless target_node.parent == nil
+      target_node.parent.children.reject! { |child| child == self } unless target_node.parent == nil
     end
   end
 
   def add_child(child_node)
-
+    child_node.parent = self
   end
 
-end
+  def remove_child(child_node)
+    raise 'Error: Node is not a child!' if !self.children.include?(child_node)
+    child_node.parent = nil
+  end
 
-n1 = PolyTreeNode.new("root1")
-n2 = PolyTreeNode.new("root2")
-n3 = PolyTreeNode.new("root3")
-n3.parent = n1
-# connect n3 to n2
-n3.parent = n2
-#
-# # this should work
-# raise "Bad parent=!" unless n3.parent == n2
-# raise "Bad parent=!" unless n2.children == [n3]
-#
-# # this probably doesn't
-# raise "Bad parent=!" unless n1.children == []
+  def dfs(target_value)
+    return self if self.value == target_value
+
+    self.children.each do |child|
+      result = child.dfs(target_value)
+      return result unless result.nil?
+    end
+
+    nil
+  end
+
+  def bfs(target_value)
+    queue = [self]
+
+    until queue.empty?
+      current_node = queue.shift
+      return current_node if current_node.value == target_value
+      queue += current_node.children
+    end
+  end
+end
