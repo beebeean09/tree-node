@@ -14,13 +14,22 @@ class KnightPathFinder
 
   end
 
+  # def bfs(target_value)
+  #   queue = [self]
+  #
+  #   until queue.empty?
+  #     current_node = queue.shift
+  #     return current_node if current_node.value == target_value
+  #     queue += current_node.children
+  #   end
+  # end
+
   def valid_moves(pos)
     valid_moves =[]
     DELTAS.each do |delta_pair|
-      # byebug
-      valid_moves << [delta_pair[0] + pos[0], delta_pair[1] + pos[1]]
+        valid_moves << [delta_pair[0] + pos[0], delta_pair[1] + pos[1]]
     end
-    valid_moves
+    valid_moves.reject! { |coord| coord.any? { |x| x < 0 || x > 8} }
   end
 
   def new_move_positions(pos)
@@ -101,5 +110,4 @@ class PolyTreeNode
 end
 
 kpf = KnightPathFinder.new([0, 0])
-kpf.valid_moves([3,3])
-kpf.new_move_positions([1,1])
+p kpf.valid_moves([3,3])
