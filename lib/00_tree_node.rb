@@ -1,5 +1,43 @@
 require 'byebug'
 
+class KnightPathFinder
+  DELTAS = [[-2,-1],[-1,2],[1,2],[2,1],[2,-1],[1,-2],[-1,-2],[-2,-1],[-2,1],[-1,2]]
+  attr_reader :valid_moves
+
+  def initialize(starting_pos)
+    @starting_pos = starting_pos
+    @visited_positions = [starting_pos]
+    build_move_tree
+  end
+
+  def build_move_tree
+
+  end
+
+  def valid_moves(pos)
+    valid_moves =[]
+    DELTAS.each do |delta_pair|
+      # byebug
+      valid_moves << [delta_pair[0] + pos[0], delta_pair[1] + pos[1]]
+    end
+    valid_moves
+  end
+
+  def new_move_positions(pos)
+    # new_moves = valid_moves(pos).reject! { |delta_pair| @visited_positions.include?(delta_pair)}
+    # byebug
+    new_positions = []
+    valid_moves(pos).each do |delta_pair|
+      if !@visited_positions.include?(delta_pair)
+        new_positions << delta_pair
+      end
+    end
+    @visited_positions.concat(new_positions)
+    new_positions
+  end
+
+end
+
 class PolyTreeNode
 
   def initialize(value = nil)
@@ -61,3 +99,7 @@ class PolyTreeNode
     end
   end
 end
+
+kpf = KnightPathFinder.new([0, 0])
+kpf.valid_moves([3,3])
+kpf.new_move_positions([1,1])
